@@ -1,0 +1,309 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: DetectorApp
+  description: Sponsor detector application
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths
+basePath: /
+#
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /api/conf:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: elasticsearch
+    get:
+      description: Return the list of the confs
+      # used as the method name of the controller
+      #operationId: getConfs
+      responses:
+        "200":
+          description: Array of confs
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Confs"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      description: Post a conf
+      operationId: addConfiguration
+      parameters:
+        - name: conf
+          in: body
+          description: Post a new configuration
+          required: true
+          schema:
+            $ref: "#/definitions/Confs"
+      responses:
+        "201":
+          description: New conf created
+          schema:
+            $ref: "#/definitions/Confs"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /api/conf/autor/all:
+    get:
+      description: Return the list of all confs for an author
+      responses:
+        "200":
+          description: Array of confs
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Confs"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /api/conf/{domainName}:
+    get:
+      description: Return the conf for a domain
+      parameters:
+        - name: domainName
+          in: path
+          description: A domain name for the conf.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: A conf for a domain
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Confs"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      description: Delete a conf for a domain name
+      parameters:
+        - name: domainName
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Delete successful
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /api/conf/{domainName}/all:
+    get:
+      description: Return the list of all confs for a domain
+      parameters:
+        - name: domainName
+          in: path
+          description: A domain name for the confs.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: A list of confs for a domain
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Confs"
+            # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /api/conf/{domainName}/{authorName}:
+    get:
+      description: Return the list of all confs for a domain
+      parameters:
+        - name: domainName
+          in: path
+          description: A domain name for the conf.
+          required: true
+          type: string
+        - name: authorName
+          in: path
+          description: An author for the conf.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: A list of confs for a domain and an author name
+          schema:
+              # a pointer to a definition
+              $ref: "#/definitions/Confs"
+          # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /api/stats/{domainName}:
+    get:
+      description: Return the stats for a domain
+      parameters:
+        - name: domainName
+          in: path
+          description: A domain name for the stats.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: A list of stats for a domain
+          schema:
+              # a pointer to a definition
+            $ref: "#/definitions/Stat"
+          # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /api/stats/{domainName}/{authorName}:
+    get:
+      description: Return the stats for a domain and  an author
+      parameters:
+        - name: domainName
+          in: path
+          description: A domain name for the stats.
+          required: true
+          type: string
+        - name: authorName
+          in: path
+          description: An author name for the stats.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: A list of stats for a domain and a name
+          schema:
+              # a pointer to a definition
+            $ref: "#/definitions/Stat"
+          # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /api/stat:
+    post:
+      summary: Add of a stat
+      description: post a stat for an auhtor or domain
+      parameters:
+        - name: stat
+          in: body
+          description: Post a new configuration
+          required: true
+          schema:
+            $ref: "#/definitions/Stat"
+      responses:
+        "201":
+          description: New stat created
+          schema:
+            $ref: "#/definitions/Stat"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+
+definitions:
+  Stat:
+    properties:
+      author:
+        type: string
+        description: An author name
+      sponsor:
+        type: string
+        description: A sponsor name
+      domain:
+        type: string
+        description: A domain name
+      title:
+        type: string
+        description: A stat title
+      link:
+        type: string
+        description: A stat link
+  Extractor:
+    properties:
+      name:
+        type: string
+        description: Name of the extractor
+      params:
+        type: array
+        items:
+          $ref: "#/definitions/Param"
+  Detector:
+    properties:
+      name:
+        type: string
+        description: Name of the detector
+      params:
+        type: array
+        items:
+          $ref: "#/definitions/Param"
+  Param:
+    properties:
+      param:
+        type: string
+        description: A parameter for an extractor or detector
+  Author:
+    properties:
+      extractor:
+        type: array
+        items:
+          $ref: "#/definitions/Extractor"
+        description: An author extractor
+
+  Sponsor:
+    properties:
+      extractor:
+        type: array
+        items:
+          $ref: "#/definitions/Extractor"
+        description: An sponsor extractor
+      detector:
+        type: array
+        items:
+          $ref: "#/definitions/Detector"
+        description: An sponsor detector
+  Confs:
+    properties:
+      domain:
+        type: string
+        description: Name of the domain
+      name:
+        type: string
+        description: Name of the conf
+      author:
+        type: array
+        items:
+          $ref: "#/definitions/Author"
+      sponsor:
+        type: array
+        items:
+          $ref: "#/definitions/Sponsor"
+      status:
+        type: string
+        description: Status of the conf
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
