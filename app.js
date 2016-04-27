@@ -9,7 +9,9 @@ var config = {
 };
 
 SwaggerExpress.create(config, function(err, swaggerExpress) {
-  if (err) { throw err; }
+  if (err) {
+    throw err;
+  }
 
   // install middleware
   swaggerExpress.register(app);
@@ -18,6 +20,10 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   app.listen(port);
 
   if (swaggerExpress.runner.swagger.paths['/hello']) {
-    console.log('try this:\ncurl http://127.0.0.1:' + port + '/hello?name=Scott');
+    console.log('try this:\ncurl http://127.0.0.1:' + port +
+      '/hello?name=Scott');
   }
 });
+
+app.use('/swagger/api', require('express').static('./api/swagger/swagger.yaml'));
+app.use('/swagger', require('express').static('./node_modules/swagger-ui/dist'));

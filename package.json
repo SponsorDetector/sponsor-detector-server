@@ -10,7 +10,8 @@
   "dependencies": {
     "elasticsearch": "^11.0.1",
     "express": "^4.12.3",
-    "swagger-express-mw": "^0.1.0"
+    "swagger-express-mw": "^0.1.0",
+    "swagger-ui": "^2.1.4"
   },
   "devDependencies": {
     "should": "^7.1.0",
