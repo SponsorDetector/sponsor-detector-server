@@ -239,6 +239,7 @@ definitions:
       link:
         type: string
         description: A stat link
+        
   Extractor:
     properties:
       name:
@@ -247,7 +248,8 @@ definitions:
       params:
         type: array
         items:
-          $ref: "#/definitions/Param"
+          type: string
+          
   Detector:
     properties:
       name:
@@ -256,31 +258,21 @@ definitions:
       params:
         type: array
         items:
-          $ref: "#/definitions/Param"
-  Param:
-    properties:
-      param:
-        type: string
-        description: A parameter for an extractor or detector
+          type: string
+          
   Author:
     properties:
       extractor:
-        type: array
-        items:
-          $ref: "#/definitions/Extractor"
+        $ref: "#/definitions/Extractor"
         description: An author extractor
 
   Sponsor:
     properties:
       extractor:
-        type: array
-        items:
-          $ref: "#/definitions/Extractor"
+        $ref: "#/definitions/Extractor"
         description: An sponsor extractor
       detector:
-        type: array
-        items:
-          $ref: "#/definitions/Detector"
+        $ref: "#/definitions/Detector"
         description: An sponsor detector
   Confs:
     properties:
@@ -291,16 +283,13 @@ definitions:
         type: string
         description: Name of the conf
       author:
-        type: array
-        items:
-          $ref: "#/definitions/Author"
+        $ref: "#/definitions/Author"
       sponsor:
-        type: array
-        items:
-          $ref: "#/definitions/Sponsor"
+        $ref: "#/definitions/Sponsor"
       status:
         type: string
         description: Status of the conf
+        
   ErrorResponse:
     required:
       - message
