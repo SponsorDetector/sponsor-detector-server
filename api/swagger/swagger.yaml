@@ -25,7 +25,7 @@ paths:
     get:
       description: Return the list of the confs
       # used as the method name of the controller
-      #operationId: getConfs
+      operationId: getAllConfiguration
       responses:
         "200":
           description: Array of confs
@@ -74,6 +74,7 @@ paths:
   /api/conf/{domainName}:
     get:
       description: Return the conf for a domain
+      operationId: getAllConfigurationByDomain
       parameters:
         - name: domainName
           in: path
@@ -239,7 +240,7 @@ definitions:
       link:
         type: string
         description: A stat link
-        
+
   Extractor:
     properties:
       name:
@@ -249,7 +250,7 @@ definitions:
         type: array
         items:
           type: string
-          
+
   Detector:
     properties:
       name:
@@ -259,7 +260,7 @@ definitions:
         type: array
         items:
           type: string
-          
+
   Author:
     properties:
       extractor:
@@ -290,10 +291,12 @@ definitions:
         type: string
         description: Status of the conf
       pushedAt:
-        type: dateTime
+        type: string
+        format: dateTime
       updatedAt:
-        type: dateTime
-        
+        type: string
+        format: dateTime
+
   ErrorResponse:
     required:
       - message

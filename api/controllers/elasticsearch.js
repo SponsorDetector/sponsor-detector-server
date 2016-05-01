@@ -124,7 +124,8 @@ function initMapping() {
 }
 exports.initMapping = initMapping;
 
-function addConfiguration(configuration) {
+function addConfiguration(req, res) {
+   var configuration = req.body
     return elasticClient.index({
         index: configuration,
         type: "configuration",
@@ -134,17 +135,17 @@ function addConfiguration(configuration) {
             author: {
                 extractor: {
                   name : configuration.author.extractor.name,
-                  params : configuration.author.extractor.params.split(",")
+                  params : configuration.author.extractor.params
                 }
             },
             sponsor: {
                 detector: {
                   name : configuration.sponsor.detector.name,
-                  params : configuration.sponsor.detector.params.split(",")
+                  params : configuration.sponsor.detector.params
                 },
                 extractor: {
                   name : configuration.sponsor.extractor.name,
-                  params : configuration.sponsor.extractor.params.split(",")
+                  params : configuration.sponsor.extractor.params
                 }
             },
             status : configuration.status
@@ -153,8 +154,37 @@ function addConfiguration(configuration) {
 }
 exports.addConfiguration = addConfiguration;
 
+function getAllConfiguration(req, res) {
+    return elasticClient.get({
+        index: configuration,
+        type: "configuration",
+        body: {
+          query: {
+            match_all: {}
+          }
+        }
+    });
+}
+exports.getAllConfiguration = getAllConfiguration;
 
-function addSponsoredContent(sponsoredContent) {
+function getAllConfigurationByDomain(req, res) {
+    return elasticClient.get({
+        index: configuration,
+        type: "configuration",
+        body: {
+          query: {
+            match: {
+              domainName: req.query
+            }
+          }
+        }
+    });
+}
+exports.getAllConfiguration = getAllConfiguration;
+
+
+function addSponsoredContent(req, res) {
+    var sponsoredContent = req.body
     return elasticClient.index({
         index: sponsoredContent,
         type: "sponsoredContent",
