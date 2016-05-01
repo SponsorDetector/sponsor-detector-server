@@ -156,7 +156,7 @@ exports.addConfiguration = addConfiguration;
 
 function getAllConfiguration(req, res) {
     return elasticClient.get({
-        index: configuration,
+        index: "configuration",
         type: "configuration",
         body: {
           query: {
@@ -168,13 +168,15 @@ function getAllConfiguration(req, res) {
 exports.getAllConfiguration = getAllConfiguration;
 
 function getAllConfigurationByDomain(req, res) {
+    console.log("blblblblbllbl")
     return elasticClient.get({
-        index: configuration,
+        index: "configuration",
         type: "configuration",
         body: {
           query: {
-            match: {
-              domainName: req.query
+            multi_match: {
+              query: 'express js',
+              fields: ['domainName']
             }
           }
         }
