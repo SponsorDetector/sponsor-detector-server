@@ -1,8 +1,9 @@
 var elasticsearch = require('elasticsearch');
 
 var elasticClient = new elasticsearch.Client({
-    host: 'localhost:9300',
-    log: 'info'
+    host: 'localhost:9200',
+    log: 'trace'
+
 });
 
 var configuration = "configurationIndex";
@@ -126,8 +127,8 @@ exports.initMapping = initMapping;
 
 function addConfiguration(req, res) {
    var configuration = req.body
-    return elasticClient.index({
-        index: configuration,
+    elasticClient.index({
+        index: "configuration",
         type: "configuration",
         body: {
             domain: configuration.domain,
@@ -151,11 +152,13 @@ function addConfiguration(req, res) {
             status : configuration.status
         }
     });
+    res.status(201);
+    res.send(configuration) ;
 }
 exports.addConfiguration = addConfiguration;
 
 function getAllConfiguration(req, res) {
-    return elasticClient.get({
+    elasticClient.search({
         index: "configuration",
         type: "configuration",
         body: {
@@ -163,6 +166,9 @@ function getAllConfiguration(req, res) {
             match_all: {}
           }
         }
+    }).then(function (resp) {
+      var hits = resp.hits.hits;
+      res.send(hits);
     });
 }
 exports.getAllConfiguration = getAllConfiguration;
@@ -188,7 +194,7 @@ exports.getAllConfiguration = getAllConfiguration;
 function addSponsoredContent(req, res) {
     var sponsoredContent = req.body
     return elasticClient.index({
-        index: sponsoredContent,
+        index: "sponsoredContent",
         type: "sponsoredContent",
         body: {
             id: sponsoredContent.id,

@@ -299,7 +299,7 @@ definitions:
 
   ErrorResponse:
     required:
-      - message
+      - mess
     properties:
-      message:
+      mess:
         type: string

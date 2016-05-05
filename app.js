@@ -27,3 +27,12 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
 
 app.use('/swagger/api', require('express').static('./api/swagger/swagger.yaml'));
 app.use('/swagger', require('express').static('./node_modules/swagger-ui/dist'));
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+app.post('/', function(req, res, next) {
+    console.log("blblbl")
+});
