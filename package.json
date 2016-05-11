@@ -8,18 +8,24 @@
   "license": "",
   "main": "app.js",
   "dependencies": {
+    "common-env": "^5.2.1",
     "elasticsearch": "^11.0.1",
     "express": "^4.12.3",
-    "swagger-express-mw": "^0.1.0",
+    "swagger-express-mw": "^0.6.0",
     "swagger-tools": "^0.10.1",
     "swagger-ui": "^2.1.4"
   },
   "devDependencies": {
     "should": "^7.1.0",
-    "supertest": "^1.0.0"
+    "supertest": "^1.0.0",
+    "webpack": "^1.13.0",
+    "webpack-dev-server": "^1.14.1",
+    "webpack-node-externals": "^1.2.0"
   },
   "scripts": {
-    "start": "node app.js",
+    "start": "node app",
+    "build-dev": "webpack --color --progress --display-error-details  --config webpack.config.js --display-modules",
+    "webpack-dev": "webpack-dev-server",
     "test": "swagger project test"
   }
 }
