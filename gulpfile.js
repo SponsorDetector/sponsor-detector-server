@@ -1,4 +1,6 @@
 var gulp = require('gulp');
+var gulp_tar = require('gulp-tar');
+var gulp_gz = require('gulp-gzip');
 var webpack = require("webpack");
 var webpackConfig = require("./webpack.config.js");
 var webpack_stream = require('webpack-stream');
@@ -46,18 +48,18 @@ gulp.task('swaggerui', function() {
     .pipe(gulp.dest(path.DEST + "/swaggerui"));
 });
 
-gulp.task('package-resources', function() {
+gulp.task('prepare-resources', function() {
   return gulp.src(path.RESOURCES)
     .pipe(gulp.dest(path.RESOURCES_DEST));
 })
 
-gulp.task('package-config', function() {
+gulp.task('prepare-config', function() {
   return gulp.src('./config/**')
     .pipe(gulp.dest(path.DEST + "/config"));
 })
 
-gulp.task('build', ['webpack', 'swaggerui', 'package-resources',
-  'package-config'
+gulp.task('build', ['webpack', 'swaggerui', 'prepare-resources',
+  'prepare-config'
 ]);
 
 gulp.task('watch', function() {
@@ -66,3 +68,10 @@ gulp.task('watch', function() {
 });
 
 gulp.task('dev', ['webpack-dev-server', 'watch']);
+
+gulp.task('package', ['build'], function() {
+  gulp.src(path.DEST + '/**')
+    .pipe(gulp_tar('package.tar'))
+    .pipe(gulp_gz())
+    .pipe(gulp.dest(path.DEST));
+})
