@@ -53,14 +53,8 @@ gulp.task('prepare-resources', function() {
     .pipe(gulp.dest(path.RESOURCES_DEST));
 })
 
-gulp.task('prepare-config', function() {
-  return gulp.src('./config/**')
-    .pipe(gulp.dest(path.DEST + "/config"));
-})
 
-gulp.task('build', ['webpack', 'swaggerui', 'prepare-resources',
-  'prepare-config'
-]);
+gulp.task('build', ['webpack', 'swaggerui', 'prepare-resources']);
 
 gulp.task('watch', function() {
   console.log('watching files for hot server.')
@@ -74,4 +68,6 @@ gulp.task('package', ['build'], function() {
     .pipe(gulp_tar('package.tar'))
     .pipe(gulp_gz())
     .pipe(gulp.dest(path.DEST));
-})
+});
+
+gulp.task('default', ['build']);
