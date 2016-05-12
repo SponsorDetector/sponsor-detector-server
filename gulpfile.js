@@ -51,7 +51,14 @@ gulp.task('package-resources', function() {
     .pipe(gulp.dest(path.RESOURCES_DEST));
 })
 
-gulp.task('build', ['webpack', 'swaggerui', 'package-resources']);
+gulp.task('package-config', function() {
+  return gulp.src('./config/**')
+    .pipe(gulp.dest(path.DEST + "/config"));
+})
+
+gulp.task('build', ['webpack', 'swaggerui', 'package-resources',
+  'package-config'
+]);
 
 gulp.task('watch', function() {
   console.log('watching files for hot server.')
