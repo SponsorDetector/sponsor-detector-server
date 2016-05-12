@@ -16,11 +16,15 @@
     "swagger-ui": "^2.1.4"
   },
   "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-util": "^3.0.7",
     "should": "^7.1.0",
     "supertest": "^1.0.0",
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1",
-    "webpack-node-externals": "^1.2.0"
+    "webpack-node-externals": "^1.2.0",
+    "webpack-stream": "^3.2.0"
   },
   "scripts": {
     "start": "node app",

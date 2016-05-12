@@ -12,7 +12,7 @@ var nodeModules = require('webpack-node-externals')();
 
 module.exports = {
   entry: {
-    server: ['./app.js', './api/controllers/elasticsearch.js']
+    server: ['./app.js']
   },
   target: 'node',
   externals: nodeModules,
