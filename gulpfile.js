@@ -34,7 +34,6 @@ gulp.task('swagger', function() {
   return gulp.src(path.SWAGGER)
     .pipe(gulp.dest(path.DEST + "/" + path.SWAGGER));
 });
-
 gulp.task('watch', function() {
   console.log('watching files for hot server.')
   gulp.watch(path.ALL, ['webpack']);

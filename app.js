@@ -2,27 +2,32 @@
 var SwaggerExpress = require('swagger-express-mw');
 var SwaggerUi = require('swagger-tools/middleware/swagger-ui');
 var app = require('express')();
+var express = require('express');
+var bodyParser = require('body-parser');
 module.exports = app; // for testing
 
 var config = {
   appRoot: __dirname
 };
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
+
+var port = process.env.PORT || 10010;
 
 SwaggerExpress.create(config, function(err, swaggerExpress) {
   if (err) {
     throw err;
   }
   app.use(SwaggerUi(swaggerExpress.runner.swagger));
-
   swaggerExpress.register(app);
 
-  var port = process.env.PORT || 10010;
   app.listen(port, function() {
     console.log('now running on port', port);
   });
 });
 
 if (process.env.mode === "dev") {
+  console.log("dev mode");
   var webpack = require("webpack");
   var webpackConfig = require("./webpack.config.js");
 
