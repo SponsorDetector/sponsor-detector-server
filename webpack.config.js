@@ -6,18 +6,21 @@ var webpack = require('webpack'),
 var configDir = path.join(__dirname, "/config"),
   apiDir = path.join(__dirname, "/api"),
   publicDir = path.join(__dirname, "/public");
-
-
 var nodeModules = require('webpack-node-externals')();
 
 module.exports = {
   entry: {
-    server: ['./app.js']
+    server: ['./app.js', 'webpack-hot-middleware/client']
   },
   target: 'node',
   externals: nodeModules,
   plugins: [
-    //  new webpack.HotModuleReplacementPlugin()
+    // Webpack 1.0
+    new webpack.optimize.OccurenceOrderPlugin(),
+    // Webpack 2.0 fixed this mispelling
+    // new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
   ],
   module: {
     loaders: [{
