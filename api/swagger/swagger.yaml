@@ -57,8 +57,10 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
   /api/conf/autor/all:
+    x-swagger-router-controller: elasticsearch
     get:
       description: Return the list of all confs for an author
+      operationId: getAllConfigurationAuthorAll
       responses:
         "200":
           description: Array of confs
@@ -72,6 +74,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
 
   /api/conf/{domainName}:
+    x-swagger-router-controller: elasticsearch
     get:
       description: Return the conf for a domain
       operationId: getAllConfigurationByDomain
@@ -108,8 +111,10 @@ paths:
             $ref: "#/definitions/ErrorResponse"
 
   /api/conf/{domainName}/all:
+    x-swagger-router-controller: elasticsearch
     get:
       description: Return the list of all confs for a domain
+      operationId: getAllConfigurationByDomainAll
       parameters:
         - name: domainName
           in: path
@@ -129,8 +134,10 @@ paths:
             $ref: "#/definitions/ErrorResponse"
 
   /api/conf/{domainName}/{authorName}:
+    x-swagger-router-controller: elasticsearch
     get:
       description: Return the list of all confs for a domain
+      operationId: getAllConfigurationByDomainAuthor
       parameters:
         - name: domainName
           in: path
@@ -155,8 +162,10 @@ paths:
             $ref: "#/definitions/ErrorResponse"
 
   /api/stats/{domainName}:
+    x-swagger-router-controller: elasticsearch
     get:
       description: Return the stats for a domain
+      operationId: getAllSponsoredContentByDomain
       parameters:
         - name: domainName
           in: path
@@ -176,8 +185,10 @@ paths:
             $ref: "#/definitions/ErrorResponse"
 
   /api/stats/{domainName}/{authorName}:
+    x-swagger-router-controller: elasticsearch
     get:
       description: Return the stats for a domain and  an author
+      operationId: getAllSponsoredContentByDomainAuthor
       parameters:
         - name: domainName
           in: path
@@ -200,9 +211,11 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /api/stat:
+  /api/stats:
+    x-swagger-router-controller: elasticsearch
     post:
       summary: Add of a stat
+      operationId: addSponsoredContent
       description: post a stat for an auhtor or domain
       parameters:
         - name: stat
