@@ -10,6 +10,8 @@ var del = require('del');
 var debug = require('gulp-debug');
 var WebpackDevServer = require("webpack-dev-server");
 var gulpsync = require('gulp-sync')(gulp);
+var nodeInspector = require('gulp-node-inspector');
+var nodemon = require('gulp-nodemon');
 var spawn = require('child_process').spawn,
     node;
 
@@ -41,21 +43,28 @@ gulp.task('swagger', function() {
 });
 
 gulp.task('debug', function() {
-    if (node) {
-      node.kill()
-    }
-    node = spawn('node', ['app.js'], {stdio: 'inherit'})
-    node.on('close', function (code) {
-      if (code === 8) {
-        gulp.log('Error detected, waiting for changes...');
-      }
-    });
+    // if (node) {
+    //   node.kill()
+    // }
+    // node = spawn('node', ['app.js'], {stdio: 'inherit'})
+    // node.on('close', function (code) {
+    //   if (code === 8) {
+    //     gulp.log('Error detected, waiting for changes...');
+    //   }
+    // });
 });
 
 gulp.task('dev', gulpsync.sync(['debug']), function() {
-  gulp.watch(path.WATCH, function() {
-    gulp.run('debug');
-  });
+  nodemon({
+    exec: 'node-inspector --web-port=8081 & node --debug-brk ',
+    ext: 'js',
+    ignore: ['.dist/*', 'node_modules/*'],
+    script: 'app',
+    verbose: true
+  }).on('start', ['']);
+  // gulp.watch(path.WATCH, function() {
+  //   gulp.run('debug');
+  // });
 })
 
 gulp.task('package', ['clean', 'build', 'swagger'], function() {
