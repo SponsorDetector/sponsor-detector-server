@@ -4,6 +4,7 @@ var SwaggerUi = require('swagger-tools/middleware/swagger-ui');
 var app = require('express')();
 var express = require('express');
 var bodyParser = require('body-parser');
+var debug = require('gulp-debug');
 module.exports = app; // for testing
 
 var config = {
