@@ -153,7 +153,7 @@ function addConfiguration(req, res) {
         }
     });
     res.status(201);
-    res.send(configuration);
+    res.send(configuration) ;
 }
 exports.addConfiguration = addConfiguration;
 
@@ -173,46 +173,8 @@ function getAllConfiguration(req, res) {
 }
 exports.getAllConfiguration = getAllConfiguration;
 
-function getAllConfigurationAuthorAll(req, res) {
-    elasticClient.search({
-        index: "configuration",
-        type: "configuration",
-        body: {
-          query: {
-            match: {
-              "fields": [ "authorName" ]
-            }
-          }
-        }
-    }).then(function (resp) {
-      var hits = resp.hits.hits;
-      res.send(hits);
-    });
-}
-exports.getAllConfigurationAuthorAll = getAllConfigurationAuthorAll;
-
 function getAllConfigurationByDomain(req, res) {
-    return elasticClient.get({
-        index: "configuration",
-        type: "configuration",
-        body: {
-          query: {
-            multi_match: {
-              match:{
-                authorName: ""
-              },
-              query: 'express js',
-              fields: ['domainName']
-            }
-          }
-        }
-    }).then(function (resp) {
-      var hits = resp.hits.hits;
-      res.send(hits);
-    });
-}
-
-function getAllConfigurationByDomainAll(req, res) {
+    console.log("blblblblbllbl")
     return elasticClient.get({
         index: "configuration",
         type: "configuration",
@@ -224,37 +186,15 @@ function getAllConfigurationByDomainAll(req, res) {
             }
           }
         }
-    }).then(function (resp) {
-      var hits = resp.hits.hits;
-      res.send(hits);
     });
 }
-exports.getAllConfigurationByDomainAll = getAllConfigurationByDomainAll;
-
-function getAllConfigurationByDomainAuthor(req, res) {
-    return elasticClient.get({
-        index: "configuration",
-        type: "configuration",
-        body: {
-          query: {
-            multi_match: {
-              query: 'express js',
-              fields: ['domainName', 'authorName']
-            }
-          }
-        }
-    }).then(function (resp) {
-      var hits = resp.hits.hits;
-      res.send(hits);
-    });
-}
-exports.getAllConfigurationByDomainAuthor = getAllConfigurationByDomainAuthor;
+exports.getAllConfiguration = getAllConfiguration;
 
 
 function addSponsoredContent(req, res) {
     var sponsoredContent = req.body
     return elasticClient.index({
-        index: "sponsoredcontent",
+        index: "sponsoredContent",
         type: "sponsoredContent",
         body: {
             id: sponsoredContent.id,
@@ -265,47 +205,6 @@ function addSponsoredContent(req, res) {
             link: sponsoredContent.link
             }
         }
-
-    ).then(res.status(201)).then(res.send(sponsoredContent));
+    );
 }
 exports.addSponsoredContent = addSponsoredContent;
-
-function getAllSponsoredContentByDomain(req, res) {
-    // var domainName = require('domainName');
-    var test = req.params;
-    return elasticClient.get({
-        index: "sponsoredcontent",
-        type: "sponsoredcontent",
-        body: {
-          query: {
-            multi_match: {
-              query: test.domainName,
-              fields: ['domainName']
-            }
-          }
-        }
-    }).then(function (resp) {
-      var hits = resp.hits.hits;
-      res.send(hits);
-    });
-}
-exports.getAllSponsoredContentByDomain = getAllSponsoredContentByDomain;
-
-function getAllSponsoredContentByDomainAuthor(req, res) {
-    return elasticClient.get({
-        index: "sponsoredcontent",
-        type: "sponsoredcontent",
-        body: {
-          query: {
-            multi_match: {
-              query: 'express js',
-              fields: ['domainName', 'authorName']
-            }
-          }
-        }
-    }).then(function (resp) {
-      var hits = resp.hits.hits;
-      res.send(hits);
-    });
-}
-exports.getAllSponsoredContentByDomainAuthor = getAllSponsoredContentByDomainAuthor;

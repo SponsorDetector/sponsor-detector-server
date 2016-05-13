@@ -10,7 +10,7 @@ var nodeModules = require('webpack-node-externals')();
 
 module.exports = {
   entry: {
-    server: ['./app.js', 'webpack-hot-middleware/client']
+    app: ['./app.js', 'webpack-hot-middleware/client']
   },
   target: 'node',
   externals: nodeModules,

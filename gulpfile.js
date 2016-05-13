@@ -42,18 +42,6 @@ gulp.task('swagger', function() {
     .pipe(gulp.dest(path.DEST + "/" + path.SWAGGER));
 });
 
-gulp.task('debug', function() {
-    // if (node) {
-    //   node.kill()
-    // }
-    // node = spawn('node', ['app.js'], {stdio: 'inherit'})
-    // node.on('close', function (code) {
-    //   if (code === 8) {
-    //     gulp.log('Error detected, waiting for changes...');
-    //   }
-    // });
-});
-
 gulp.task('dev', gulpsync.sync(['debug']), function() {
   nodemon({
     exec: 'node-inspector --web-port=8081 & node --debug-brk ',
@@ -62,20 +50,17 @@ gulp.task('dev', gulpsync.sync(['debug']), function() {
     script: 'app',
     verbose: true
   }).on('start', ['']);
-  // gulp.watch(path.WATCH, function() {
-  //   gulp.run('debug');
-  // });
 })
 
 gulp.task('package', ['clean', 'build', 'swagger'], function() {
   gulp.src('package.json')
   	.pipe(debug({title: 'package:'}))
     .pipe(gulp.dest(path.DEST));
-  gulp.src(path.DEST + '/**')
-    .pipe(debug({title: 'package:'}))
-    .pipe(gulp_tar('package.tar'))
-    .pipe(gulp_gz())
-    .pipe(gulp.dest(path.DEST));
+   gulp.src(['./api/**/*.js'])
+  //    .pipe(debug({title: 'package:'}))
+  //   // .pipe(gulp_tar('package.tar'))
+  //   // .pipe(gulp_gz())
+     .pipe(gulp.dest(path.DEST));
 });
 
 gulp.task('default', ['build']);
