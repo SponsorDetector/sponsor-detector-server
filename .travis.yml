@@ -6,4 +6,4 @@ before_script:
   - npm install
 script: gulp package
 after_success:
-  - if [[ $TRAVIS_BRANCH == 'dev' ]]; then git remote add origin $DEPLOY_REPO; git add .; git commit -m "Build $TRAVIS_BUILD_NUMBER" fi
+  - if [[ $TRAVIS_BRANCH == "dev" ]]; then git remote add origin $DEPLOY_REPO; git add .; git commit -m "Build $TRAVIS_BUILD_NUMBER" fi
