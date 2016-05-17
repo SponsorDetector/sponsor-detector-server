@@ -10,6 +10,7 @@ module.exports = app; // for testing
 var config = {
   appRoot: __dirname
 };
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 
@@ -26,18 +27,6 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
     console.log('now running on port', port);
   });
 });
-
-if (process.env.mode === "dev") {
-  console.log("dev mode");
-  var webpack = require("webpack");
-  var webpackConfig = require("./webpack.config.js");
-
-  var compiler = webpack(webpackConfig);
-  app.use(require('webpack-dev-middleware')(compiler, {
-    publicPath: webpackConfig.output.publicPath
-  }));
-  app.use(require('webpack-hot-middleware')(compiler));
-}
 
 app.use('/swagger/api', require('express').static('./resources/swagger.yaml'));
 app.use('/swagger', require('express').static('./node_modules/swagger-ui/dist'));

@@ -10,9 +10,12 @@ var nodeModules = require('webpack-node-externals')();
 
 module.exports = {
   entry: {
-    app: ['./app.js', 'webpack-hot-middleware/client']
+    app: ['./app.js']
   },
   target: 'node',
+  node: {
+    __dirname : false
+  },
   externals: nodeModules,
   plugins: [
     // Webpack 1.0
@@ -24,12 +27,13 @@ module.exports = {
   ],
   module: {
     loaders: [{
-      test: /\.yaml$/,
-      loader: 'style!css!sass',
+      test: /\.js$/,
+      exclude:'./node_modules',
+      loader: 'babel'
     }]
   },
   output: {
-    path: path.join(__dirname, 'build'),
+    path: path.join(__dirname, 'dist'),
     filename: '[name].js'
   }
 }
