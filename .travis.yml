@@ -3,9 +3,8 @@ node_js:
   - "4"
 before_script:
   - npm install -g gulp
-  - npm install
 script: gulp package
 after_success:
-  - if [[ $TRAVIS_BRANCH == "dev" ]]; then cd dist; git init; git remote add origin $DEPLOY_REPO; git add .; git commit -m "Build $TRAVIS_BUILD_NUMBER"; fi
+  - if [[ $TRAVIS_BRANCH == "dev" ]]; then cd dist; git init; git config --global user.email travisbuild@.com; git config --global user.name travisbuild; git remote add origin $DEPLOY_REPO; git add .; git commit -m "Build $TRAVIS_BUILD_NUMBER"; fi
 notifications:
   email: false
