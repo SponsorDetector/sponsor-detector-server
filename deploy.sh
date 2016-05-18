@@ -4,6 +4,7 @@ chmod 600 key
 mv id_rsa ~/.ssh/id_rsa
 mv id_rsa.pub ~/.ssh/id_rsa.pub
 ssh-add ~/.ssh/id_rsa
+reload ssh
 cd dist;
 pwd;
 git init;
