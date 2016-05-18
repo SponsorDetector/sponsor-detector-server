@@ -59,9 +59,6 @@ gulp.task('package', ['clean', 'build', 'swagger'], function() {
   gulp.src('./api/**/*.js')
     .pipe(gulp.dest(path.DEST+ "/api"));
    gulp.src(["./webpack.config.js"])
-  //    .pipe(debug({title: 'package:'}))
-  //   // .pipe(gulp_tar('package.tar'))
-  //   // .pipe(gulp_gz())
      .pipe(gulp.dest(path.DEST));
 });
 
