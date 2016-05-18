@@ -1,8 +1,7 @@
 #!/bin/bash
 eval "$(ssh-agent -s)"
-chmod 600 key
 mv id_rsa ~/.ssh/id_rsa
-mv id_rsa.pub ~/.ssh/id_rsa.pub
+chmod 600 ~/.ssh/id_rsa
 ssh-add ~/.ssh/id_rsa
 reload ssh
 cd dist;
