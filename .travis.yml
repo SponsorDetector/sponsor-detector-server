@@ -8,8 +8,7 @@ before_install:
     -in key.enc -out key -d
 script: gulp package
 after_success:
-  -
-  - if [[ $TRAVIS_BRANCH == "dev" ]]; then chmod 750 build.sh; ./deploy.sh; fi
+  - if [[ $TRAVIS_BRANCH == "dev" ]]; then chmod 750 deploy.sh; ./deploy.sh; fi
 
 notifications:
   email: false
