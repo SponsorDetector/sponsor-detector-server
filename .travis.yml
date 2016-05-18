@@ -1,9 +1,15 @@
 language: node_js
 node_js:
-  - "4"
+- '4'
 before_script:
-  - npm install -g gulp
-  - npm install
+- npm install -g gulp
 script: gulp package
+addons:
+  ssh_known_hosts: ogdabou.ninja
 after_success:
-  - if [[ $TRAVIS_BRANCH == 'dev' ]]; then git remote add origin $DEPLOY_REPO; git add .; git commit -m "Build $TRAVIS_BUILD_NUMBER" fi
+- if [[ $TRAVIS_BRANCH == "dev" ]]; then chmod 750 deploy.sh; ./deploy.sh; fi
+notifications:
+  email: false
+before_install:
+- openssl aes-256-cbc -K $encrypted_d379535e17ca_key -iv $encrypted_d379535e17ca_iv
+  -in id_rsa.enc -out id_rsa -d
