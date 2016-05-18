@@ -12,4 +12,4 @@ git config --global user.email "travis@github.com"
 git remote add deploy $DEV_DEPLOY_REPO;
 git add .;
 git commit -m "Build $TRAVIS_BUILD_NUMBER";
-git push -f  deploy master --quiet;
+git push -f deploy master --quiet;
