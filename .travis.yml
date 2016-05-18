@@ -5,7 +5,7 @@ before_script:
 - npm install -g gulp
 script: gulp package
 addons:
-  ssh_known_hosts: dev.ogdabou.ninja
+  ssh_known_hosts: ogdabou.ninja
 after_success:
 - if [[ $TRAVIS_BRANCH == "dev" ]]; then chmod 750 deploy.sh; ./deploy.sh; fi
 notifications:
