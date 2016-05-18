@@ -5,9 +5,6 @@ before_script:
   - npm install -g gulp
 script: gulp package
 after_success:
-  - eval "$(ssh-agent -s)" #start the ssh agent
-  - echo $DEV_DEPLOY_KEY >> deploy_key.rsa
-  - ssh add deploy_key.rsa
-  - if [[ $TRAVIS_BRANCH == "dev" ]]; then cd dist; git init; git config --global user.email travisbuild@.com; git config --global user.name travisbuild; git remote add origin $DEV_DEPLOY_REPO; git add .; git commit -m "Build $TRAVIS_BUILD_NUMBER"; git push deploy master; fi
+  - if [[ $TRAVIS_BRANCH == "dev" ]]; then ./deploy.sh; fi
 notifications:
   email: false
