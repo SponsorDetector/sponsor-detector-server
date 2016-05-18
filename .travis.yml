@@ -3,11 +3,12 @@ node_js:
 - '4'
 before_script:
 - npm install -g gulp
-script: gulp package
-after_success:
-- if [[ $TRAVIS_BRANCH == "dev" ]]; then ./deploy.sh; fi
-notifications:
-  email: false
 before_install:
 - openssl aes-256-cbc -K $encrypted_9bbc0c90c60c_key -iv $encrypted_9bbc0c90c60c_iv
   -in key.enc -out key -d
+script: gulp package
+after_success:
+- if [[ $TRAVIS_BRANCH == "dev" ]]; then ./deploy.sh; fi
+
+notifications:
+  email: false
