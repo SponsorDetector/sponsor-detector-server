@@ -1,7 +1,8 @@
 #!/bin/bash
 eval "$(ssh-agent -s)"
 chmod 600 key
-mv key ~/.ssh/id_rsa
+mv id_rsa ~/.ssh/id_rsa
+mv id_rsa.pub ~/.ssh/id_rsa.pub
 cd dist;
 pwd;
 git init;
