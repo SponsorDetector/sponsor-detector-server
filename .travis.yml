@@ -1,11 +1,13 @@
 language: node_js
 node_js:
-- '4'
+  - '4'
 before_script:
-- npm install -g gulp
+  - npm install -g gulp
 script: gulp package
+addons:
+  ssh_known_hosts: dev.ogdabou.ninja
 after_success:
-- if [[ $TRAVIS_BRANCH == "dev" ]]; then ./deploy.sh; fi
+  - if [[ $TRAVIS_BRANCH == "dev" ]]; then chmod 750 deploy.sh; ./deploy.sh; fi
 notifications:
   email: false
 before_install:
