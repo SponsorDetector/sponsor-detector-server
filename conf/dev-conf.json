@@ -1,3 +1,13 @@
 {
-  "port": 10010
+  "port": 10010,
+  "es": {
+    "host": "dev.ogdabou.ninja",
+    "port": 9200
+  },
+  "configuration" : {
+    "index" : "configuration"
+  },
+  "stats" : {
+    "index" : "stats"
+  }
 }

@@ -8,28 +8,34 @@ var Configuration = {
   es: {
     host: 'localhost',
     port: 9200
+  },
+  configuration: {
+    type : "configuration"
+  },
+  stats : {
+    type : "stats"
   }
 };
 
-
 var loadCustomConf = function() {
+  var conf = {};
   var confFilePath = process.env.CONF;
   if (confFilePath && fs.existsSync(confFilePath)) {
     console.log('Configuration file specified : ' + confFilePath)
     try {
       var confFileStats = fs.lstatSync(confFilePath);
       if (!confFileStats.isDirectory()) {
-        var customConf = JSON.parse(fs.readFileSync(confFilePath, 'utf8'));
-        Configuration = _.merge(Configuration, customConf);
+        conf = JSON.parse(fs.readFileSync(confFilePath, 'utf8'));
         console.log('Custom configuration loaded.', customConf);
       }
     } catch (e) {
       console.log('ERROR ' + e);
     }
   }
+  return conf;
 }
 
-loadCustomConf();
+Configuration = _.merge(Configuration, loadCustomConf());
 
 console.log('Final configuration' + JSON.stringify(Configuration, null, 4));
 

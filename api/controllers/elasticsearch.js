@@ -3,9 +3,8 @@ var elasticsearch = require('elasticsearch');
 var Configuration = require('../commons/Configuration');
 
 var elasticClient = new elasticsearch.Client({
-  host: 'localhost:9200',
+  host: Configuration.es.host + ":" + Configuration.es.port,
   log: 'trace'
-
 });
 
 var configuration = "configurationIndex";
@@ -73,8 +72,8 @@ exports.deleteSponsoredContentIndex = deleteSponsoredContentIndex;
 
 function initMapping() {
   return elasticClient.indices.putMapping({
-    index: configuration,
-    type: "configuration",
+    index : Configuration.configuration.index,
+    type : Configuration.configuration.type,
     body:  {
       dynamic_templates: [{
         string_fields: {
@@ -123,8 +122,8 @@ exports.initMapping = initMapping;
 function addConfiguration(req, res) {
   var configuration = req.body
   elasticClient.index({
-    index: "configuration",
-    type: "configuration",
+    index : Configuration.configuration.index,
+    type : Configuration.configuration.type,
     body: {
       domain: configuration.domain,
       name: configuration.name,
@@ -154,8 +153,8 @@ exports.addConfiguration = addConfiguration;
 
 function getAllConfiguration(req, res) {
   elasticClient.search({
-    index: "configuration",
-    type: "configuration",
+    index : Configuration.configuration.index,
+    type : Configuration.configuration.type,
     body: {
       query: {
         match_all: {}
@@ -169,21 +168,40 @@ function getAllConfiguration(req, res) {
 exports.getAllConfiguration = getAllConfiguration;
 
 function getAllConfigurationByDomain(req, res) {
-  console.log("blblblblbllbl")
-  return elasticClient.get({
-    index: "configuration",
-    type: "configuration",
-    body: {
-      query: {
-        multi_match: {
-          query: 'express js',
-          fields: ['domainName']
+  var domainName = req.swagger.params.domainName.value;
+  // elasticClient.msearch({
+  //   body: [
+  //     { _index: 'configuration', _type: 'configuration' },
+  //     { query: { match: { domain: domainName } } }
+  //   ]
+  // }, function(error, response, status) {
+  //   if (error) {
+  //     console.log("[ERROR]" + error);
+  //   }
+  //   else {
+  //     res.send(response.responses[0].hits.hits);
+  //   }
+  // });
+  elasticClient.search({
+    index : Configuration.configuration.index,
+    type : Configuration.configuration.type,
+    body : {
+      query : {
+        match : {
+          "domain" : domainName
         }
       }
     }
+  }, function(error, response, status) {
+    if (error) {
+      console.log("[ERROR]" + error);
+    }
+    else {
+      res.send(response.hits.hits);
+    }
   });
 }
-exports.getAllConfiguration = getAllConfiguration;
+exports.getAllConfigurationByDomain = getAllConfigurationByDomain;
 
 
 function addSponsoredContent(req, res) {
