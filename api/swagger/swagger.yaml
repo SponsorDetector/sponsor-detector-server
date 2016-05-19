@@ -21,7 +21,7 @@ produces:
 paths:
   /api/conf:
     # binds a127 app logic to a route
-    x-swagger-router-controller: controllers
+    x-swagger-router-controller: elasticsearch
     get:
       description: Return the list of the confs
       # used as the method name of the controller

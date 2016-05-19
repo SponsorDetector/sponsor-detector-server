@@ -11,7 +11,21 @@ module.exports = app; // for testing
 var config = {
   appRoot: __dirname
 };
+var _ = require('lodash');
+var coucou = {
+  lol: function() {
+    console.log("coucou");
+  }
+}
 
+var coucou2 = {
+  lol2: function() {
+    console.log("coucou2");
+  }
+}
+
+coucou = _.merge(coucou, coucou2);
+coucou.lol2();
 app.use(bodyParser.urlencoded({
   extended: true
 }));

@@ -1,8 +1,10 @@
 var elasticsearch = require('elasticsearch');
 
+var Configuration = require('../commons/Configuration');
+
 var elasticClient = new elasticsearch.Client({
-    host: 'localhost:9200',
-    log: 'trace'
+  host: 'localhost:9200',
+  log: 'trace'
 
 });
 
@@ -10,201 +12,193 @@ var configuration = "configurationIndex";
 var sponsoredContent = "sponsoredContentIndex";
 
 /**
-* Delete an existing configuration index
-*/
+ * Delete an existing configuration index
+ */
 function deleteConfigurationIndex() {
-    return elasticClient.indices.delete({
-        index: configuration
-    });
+  return elasticClient.indices.delete({
+    index: configuration
+  });
 }
 exports.deleteConfigurationIndex = deleteConfigurationIndex;
 
 /**
-* create the configuration index
-*/
+ * create the configuration index
+ */
 function initConfigurationIndex() {
-    return elasticClient.indices.create({
-        index: configuration
-    });
+  return elasticClient.indices.create({
+    index: configuration
+  });
 }
 exports.initConfigurationIndex = initConfigurationIndex;
 
 /**
-* check if the configuration index exists
-*/
+ * check if the configuration index exists
+ */
 function indexConfigurationExists() {
-    return elasticClient.indices.exists({
-        index: configuration
-    });
+  return elasticClient.indices.exists({
+    index: configuration
+  });
 }
 exports.indexConfigurationExists = indexConfigurationExists;
 
 /**
-* create the sponsoredContent index
-*/
+ * create the sponsoredContent index
+ */
 function initSponsoredContentIndex() {
-    return elasticClient.indices.create({
-        index: sponsoredContent
-    });
+  return elasticClient.indices.create({
+    index: sponsoredContent
+  });
 }
 exports.initSponsoredContentIndex = initSponsoredContentIndex;
 
 /**
-* check if the sponsoredContent index exists
-*/
+ * check if the sponsoredContent index exists
+ */
 function indexSponsoredContentExists() {
-    return elasticClient.indices.exists({
-        index: sponsoredContent
-    });
+  return elasticClient.indices.exists({
+    index: sponsoredContent
+  });
 }
 exports.indexSponsoredContentExists = indexSponsoredContentExists;
 
 /**
-* Delete an existing sponsoredContent index
-*/
+ * Delete an existing sponsoredContent index
+ */
 function deleteSponsoredContentIndex() {
-    return elasticClient.indices.delete({
-        index: sponsoredContent
-    });
+  return elasticClient.indices.delete({
+    index: sponsoredContent
+  });
 }
 exports.deleteSponsoredContentIndex = deleteSponsoredContentIndex;
 
 function initMapping() {
-    return elasticClient.indices.putMapping(
-      {
-        index: configuration,
-        type: "configuration",
-        body: 
-        {
-          dynamic_templates : [
-              {
-                string_fields: {
-                  match: "*",
-                  match_mapping_type: "string",
-                  mapping: {
-                    index: "not_analyzed",
-                    omit_norms: true,
-                    type: "string"
-                  }
-                }
-              }
-            ],
-        properties: {
-          pushed_at: {
-            type: "date",
-            format : "yyyy-MM-dd HH:mm"
+  return elasticClient.indices.putMapping({
+    index: configuration,
+    type: "configuration",
+    body:  {
+      dynamic_templates: [{
+        string_fields: {
+          match: "*",
+          match_mapping_type: "string",
+          mapping: {
+            index: "not_analyzed",
+            omit_norms: true,
+            type: "string"
           }
         }
-      }
-    },
-  {
-    index: sponsoredContent,
-    type: "sponsoredContent",
-    body:{
-      dynamic_templates: [
-          {
-            string_fields: {
-              match: "*",
-              match_mapping_type: "string",
-              mapping: {
-                index: "not_analyzed",
-                omit_norms: true,
-                type: "string"
-              }
-            }
-          }
-        ],
-    properties: {
-      pushed_at: {
-        type: "date",
-        format : "yyyy-MM-dd HH:mm"
+      }],
+      properties: {
+        pushed_at: {
+          type: "date",
+          format: "yyyy-MM-dd HH:mm"
+        }
       }
     }
-  }
-});
+  }, {
+    index: sponsoredContent,
+    type: "sponsoredContent",
+    body: {
+      dynamic_templates: [{
+        string_fields: {
+          match: "*",
+          match_mapping_type: "string",
+          mapping: {
+            index: "not_analyzed",
+            omit_norms: true,
+            type: "string"
+          }
+        }
+      }],
+      properties: {
+        pushed_at: {
+          type: "date",
+          format: "yyyy-MM-dd HH:mm"
+        }
+      }
+    }
+  });
 }
 exports.initMapping = initMapping;
 
 function addConfiguration(req, res) {
-   var configuration = req.body
-    elasticClient.index({
-        index: "configuration",
-        type: "configuration",
-        body: {
-            domain: configuration.domain,
-            name: configuration.name,
-            author: {
-                extractor: {
-                  name : configuration.author.extractor.name,
-                  params : configuration.author.extractor.params
-                }
-            },
-            sponsor: {
-                detector: {
-                  name : configuration.sponsor.detector.name,
-                  params : configuration.sponsor.detector.params
-                },
-                extractor: {
-                  name : configuration.sponsor.extractor.name,
-                  params : configuration.sponsor.extractor.params
-                }
-            },
-            status : configuration.status
+  var configuration = req.body
+  elasticClient.index({
+    index: "configuration",
+    type: "configuration",
+    body: {
+      domain: configuration.domain,
+      name: configuration.name,
+      author: {
+        extractor: {
+          name: configuration.author.extractor.name,
+          params: configuration.author.extractor.params
         }
-    });
-    res.status(201);
-    res.send(configuration) ;
+      },
+      sponsor: {
+        detector: {
+          name: configuration.sponsor.detector.name,
+          params: configuration.sponsor.detector.params
+        },
+        extractor: {
+          name: configuration.sponsor.extractor.name,
+          params: configuration.sponsor.extractor.params
+        }
+      },
+      status: configuration.status
+    }
+  });
+  res.status(201);
+  res.send(configuration);
 }
 exports.addConfiguration = addConfiguration;
 
 function getAllConfiguration(req, res) {
-    elasticClient.search({
-        index: "configuration",
-        type: "configuration",
-        body: {
-          query: {
-            match_all: {}
-          }
-        }
-    }).then(function (resp) {
-      var hits = resp.hits.hits;
-      res.send(hits);
-    });
+  elasticClient.search({
+    index: "configuration",
+    type: "configuration",
+    body: {
+      query: {
+        match_all: {}
+      }
+    }
+  }).then(function(resp) {
+    var hits = resp.hits.hits;
+    res.send(hits);
+  });
 }
 exports.getAllConfiguration = getAllConfiguration;
 
 function getAllConfigurationByDomain(req, res) {
-    console.log("blblblblbllbl")
-    return elasticClient.get({
-        index: "configuration",
-        type: "configuration",
-        body: {
-          query: {
-            multi_match: {
-              query: 'express js',
-              fields: ['domainName']
-            }
-          }
+  console.log("blblblblbllbl")
+  return elasticClient.get({
+    index: "configuration",
+    type: "configuration",
+    body: {
+      query: {
+        multi_match: {
+          query: 'express js',
+          fields: ['domainName']
         }
-    });
+      }
+    }
+  });
 }
 exports.getAllConfiguration = getAllConfiguration;
 
 
 function addSponsoredContent(req, res) {
-    var sponsoredContent = req.body
-    return elasticClient.index({
-        index: "sponsoredContent",
-        type: "sponsoredContent",
-        body: {
-            id: sponsoredContent.id,
-            author: sponsoredContent.author,
-            sponsor: sponsoredContent.sponsor,
-            domain: sponsoredContent.domain,
-            title: sponsoredContent.title,
-            link: sponsoredContent.link
-            }
-        }
-    );
+  var sponsoredContent = req.body
+  return elasticClient.index({
+    index: "sponsoredContent",
+    type: "sponsoredContent",
+    body: {
+      id: sponsoredContent.id,
+      author: sponsoredContent.author,
+      sponsor: sponsoredContent.sponsor,
+      domain: sponsoredContent.domain,
+      title: sponsoredContent.title,
+      link: sponsoredContent.link
+    }
+  });
 }
 exports.addSponsoredContent = addSponsoredContent;

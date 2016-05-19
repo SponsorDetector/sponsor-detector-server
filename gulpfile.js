@@ -21,7 +21,6 @@ var path = {
   WATCH: ['./app.js', './api/**/*.js', './api/**/*.yaml', './conf/*.json'],
   SWAGGER: 'api/swagger',
   TEST_DIR: './test/**/*.js',
-  WEBPACK_BUILD: 'build',
   DEST: 'dist'
 }
 
@@ -51,7 +50,7 @@ gulp.task('webpack', function() {
       title: 'webpack:'
     }))
     .pipe(webpack_stream(webpackConfig))
-    .pipe(gulp.dest(path.WEBPACK_BUILD))
+    .pipe(gulp.dest(path.DEST))
 });
 
 gulp.task('swagger', function() {

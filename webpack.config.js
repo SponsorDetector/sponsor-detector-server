@@ -10,8 +10,7 @@ var outputDir = 'webpack';
 module.exports = {
   name: 'appServer',
   entry: {
-    app: ['./app.js'],
-    controllers: './api/controllers/controllers.js'
+    app: ['./app.js']
   },
   target: 'node',
   node: {
