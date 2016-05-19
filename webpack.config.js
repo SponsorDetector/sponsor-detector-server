@@ -3,18 +3,19 @@ var webpack = require('webpack'),
   env = require('common-env')(),
   fs = require('fs');
 
-var configDir = path.join(__dirname, "/config"),
-  apiDir = path.join(__dirname, "/api"),
-  publicDir = path.join(__dirname, "/public");
 var nodeModules = require('webpack-node-externals')();
 
+var outputDir = 'webpack';
+
 module.exports = {
+  name: 'appServer',
   entry: {
-    app: ['./app.js']
+    app: ['./app.js'],
+    controllers: './api/controllers/controllers.js'
   },
   target: 'node',
   node: {
-    __dirname : false
+    __dirname: false
   },
   externals: nodeModules,
   plugins: [
@@ -28,7 +29,7 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.js$/,
-      exclude:'./node_modules',
+      exclude: './node_modules',
       loader: 'babel'
     }]
   },

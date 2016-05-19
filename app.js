@@ -5,16 +5,19 @@ var app = require('express')();
 var express = require('express');
 var bodyParser = require('body-parser');
 var debug = require('gulp-debug');
+var Configuration = require('./api/commons/Configuration');
 module.exports = app; // for testing
 
 var config = {
   appRoot: __dirname
 };
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(bodyParser.json())
 
-var port = process.env.PORT || 10010;
+var port = Configuration.port;
 
 SwaggerExpress.create(config, function(err, swaggerExpress) {
   if (err) {
