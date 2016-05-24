@@ -169,19 +169,7 @@ exports.getAllConfiguration = getAllConfiguration;
 
 function getAllConfigurationByDomain(req, res) {
   var domainName = req.swagger.params.domainName.value;
-  // elasticClient.msearch({
-  //   body: [
-  //     { _index: 'configuration', _type: 'configuration' },
-  //     { query: { match: { domain: domainName } } }
-  //   ]
-  // }, function(error, response, status) {
-  //   if (error) {
-  //     console.log("[ERROR]" + error);
-  //   }
-  //   else {
-  //     res.send(response.responses[0].hits.hits);
-  //   }
-  // });
+
   elasticClient.search({
     index : Configuration.configuration.index,
     type : Configuration.configuration.type,
@@ -202,6 +190,35 @@ function getAllConfigurationByDomain(req, res) {
   });
 }
 exports.getAllConfigurationByDomain = getAllConfigurationByDomain;
+
+
+exports.getAllConfigurationByDomainAuthor = function (req, res) {
+  var domainName = req.swagger.params.domainName.value;
+  var authorName = req.swagger.params.authorName.value;
+  console.log("GET", domainName, authorName);
+  elasticClient.search({
+    index : Configuration.configuration.index,
+    type : Configuration.configuration.type,
+    body : {
+      query : {
+        "bool": {
+          "must": [
+            { "match": { "domain":  domainName }},
+            { "match": { "author": authorName   }}
+          ]
+        }
+
+      }
+    }
+  }, function(error, response, status) {
+    if (error) {
+      console.log("[ERROR]" + error);
+    }
+    else {
+      res.send(response.hits.hits);
+    }
+  });
+}
 
 
 function addSponsoredContent(req, res) {
