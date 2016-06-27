@@ -9,7 +9,7 @@ before_install:
 before_script:
   - npm install -g gulp
   - sleep 10
-script: gulp package
+script: gulp compile
 addons:
   ssh_known_hosts: ogdabou.ninja
 after_success:
