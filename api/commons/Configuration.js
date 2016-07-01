@@ -20,8 +20,8 @@ var Configuration = {
 var loadCustomConf = function() {
   var conf = {};
   var confFilePath = process.env.CONF;
+  console.log('Loading configuration file : ' + confFilePath)
   if (confFilePath && fs.existsSync(confFilePath)) {
-    console.log('Configuration file specified : ' + confFilePath)
     try {
       var confFileStats = fs.lstatSync(confFilePath);
       if (!confFileStats.isDirectory()) {
