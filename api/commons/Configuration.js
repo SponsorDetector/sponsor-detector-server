@@ -4,7 +4,7 @@ var fs = require('fs');
 var _ = require('lodash');
 
 var Configuration = {
-  port: 10010,
+  port: 8080,
   es: {
     host: 'localhost',
     port: 9200
