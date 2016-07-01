@@ -26,7 +26,7 @@ var loadCustomConf = function() {
       var confFileStats = fs.lstatSync(confFilePath);
       if (!confFileStats.isDirectory()) {
         conf = JSON.parse(fs.readFileSync(confFilePath, 'utf8'));
-        console.log('Custom configuration loaded.', customConf);
+        console.log('Custom configuration loaded.', conf);
       }
     } catch (e) {
       console.log('ERROR ' + e);
