@@ -1,5 +1,5 @@
 {
-  "port": 8080,
+  "port": 10010,
   "es": {
     "host": "dev.ogdabou.ninja",
     "port": 9200

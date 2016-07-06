@@ -120,31 +120,12 @@ function initMapping() {
 exports.initMapping = initMapping;
 
 function addConfiguration(req, res) {
-  var configuration = req.body
+  console.log(req);
+  var configuration = req.body;
   elasticClient.index({
     index : Configuration.configuration.index,
     type : Configuration.configuration.type,
-    body: {
-      domain: configuration.domain,
-      name: configuration.name,
-      author: {
-        extractor: {
-          name: configuration.author.extractor.name,
-          params: configuration.author.extractor.params
-        }
-      },
-      sponsor: {
-        detector: {
-          name: configuration.sponsor.detector.name,
-          params: configuration.sponsor.detector.params
-        },
-        extractor: {
-          name: configuration.sponsor.extractor.name,
-          params: configuration.sponsor.extractor.params
-        }
-      },
-      status: configuration.status
-    }
+    body: configuration
   });
   res.status(201);
   res.send(configuration);
