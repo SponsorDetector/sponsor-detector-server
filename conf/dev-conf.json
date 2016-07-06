@@ -1,7 +1,7 @@
 {
   "port": 10010,
   "es": {
-    "host": "dev.ogdabou.ninja",
+    "host": "localhost",
     "port": 9200
   },
   "configuration" : {
