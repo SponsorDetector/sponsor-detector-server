@@ -161,7 +161,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-  /api/conf/{authorName}:
+  /api/conf/author/{authorName}:
     x-swagger-router-controller: elasticsearch
     get:
       description: Return the conf for a author
