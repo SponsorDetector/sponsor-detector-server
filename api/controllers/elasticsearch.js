@@ -147,8 +147,11 @@ function addConfiguration(req, res) {
   });
   res.status(201);
 
-  if (authoredConf) {
-    return elasticClient.search({
+
+  console.log("[------------------------------------------]");
+  if (configuration.authorName) {
+    console.log("[ERRORzefzef]" );
+    elasticClient.search({
         index: "sponsoredcontent",
         type: "sponsoredcontent",
         body: {
@@ -161,16 +164,16 @@ function addConfiguration(req, res) {
             }
           }
         }
-    }), function(error, response, status) {
+    }, function(error, response, status) {
       if (error) {
         console.log("[ERROR]" + error);
       }
       else {
         res.send(response.hits.hits);
       }
-    };
-  }
-  return elasticClient.search({
+    })
+  console.log("dfzeggz");
+  elasticClient.search({
       index: "sponsoredcontent",
       type: "sponsoredcontent",
       body: {
@@ -180,14 +183,15 @@ function addConfiguration(req, res) {
           }
         }
       }
-  }), function(error, response, status) {
+  }, function(error, response, status) {
     if (error) {
       console.log("[ERROR]" + error);
     }
     else {
+        console.log("dfzergqergergqergqergqergggz");
       res.send(response.hits.hits);
     }
-  };
+  })
   //res.send(configuration);
 }
 exports.addConfiguration = addConfiguration;
@@ -221,14 +225,14 @@ function getAllConfigurationAuthorAll(req, res) {
             }
           }
         }
-    }), function(error, response, status) {
+    }, function(error, response, status) {
       if (error) {
         console.log("[ERROR]" + error);
       }
       else {
         res.send(response.hits.hits);
       }
-    };
+    })
 }
 exports.getAllConfigurationAuthorAll = getAllConfigurationAuthorAll;
 
@@ -252,7 +256,7 @@ function getAllConfigurationByDomain(req, res) {
     else {
       res.send(response.hits.hits);
     }
-  });
+  })
 }
 exports.getAllConfigurationByDomain = getAllConfigurationByDomain;
 
@@ -268,14 +272,14 @@ function getAllConfigurationByDomainAll(req, res) {
             }
           }
         }
-    }), function(error, response, status) {
+    }, function(error, response, status) {
       if (error) {
         console.log("[ERROR]" + error);
       }
       else {
         res.send(response.hits.hits);
       }
-    };
+    })
 }
 exports.getAllConfigurationByDomainAll = getAllConfigurationByDomainAll;
 
@@ -304,7 +308,7 @@ exports.getAllConfigurationByDomainAuthor = function (req, res) {
     else {
       res.send(response.hits.hits);
     }
-  });
+  })
 }
 
 function getAllConfigurationByAuthor(req, res) {
@@ -327,7 +331,7 @@ function getAllConfigurationByAuthor(req, res) {
     else {
       res.send(response.hits.hits);
     }
-  });
+  })
 }
 exports.getAllConfigurationByDomain = getAllConfigurationByDomain;
 
@@ -362,14 +366,14 @@ function getAllSponsoredContentByDomain(req, res) {
             }
           }
         }
-    }), function(error, response, status) {
+    }, function(error, response, status) {
       if (error) {
         console.log("[ERROR]" + error);
       }
       else {
         res.send(response.hits.hits);
       }
-    };
+    })
 }
 exports.getAllSponsoredContentByDomain = getAllSponsoredContentByDomain;
 
@@ -390,13 +394,13 @@ function getAllSponsoredContentByDomainAuthor(req, res) {
             }
           }
         }
-    }), function(error, response, status) {
+    }, function(error, response, status) {
       if (error) {
         console.log("[ERROR]" + error);
       }
       else {
         res.send(response.hits.hits);
       }
-    };
+    })
 }
 exports.getAllSponsoredContentByDomainAuthor = getAllSponsoredContentByDomainAuthor;
