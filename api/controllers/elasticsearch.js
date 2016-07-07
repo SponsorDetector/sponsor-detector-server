@@ -148,9 +148,33 @@ function getAllConfiguration(req, res) {
 }
 exports.getAllConfiguration = getAllConfiguration;
 
+function getAllConfigurationAuthorAll(req, res) {
+  var authorName = req.swagger.params.authorName.value;
+  console.log("GET CONF ALL", authorName);
+    elasticClient.search({
+        index: "configuration",
+        type: "configuration",
+        body: {
+          query: {
+            match: {
+              "domain": "\*" // tocheck
+            }
+          }
+        }
+    }), function(error, response, status) {
+      if (error) {
+        console.log("[ERROR]" + error);
+      }
+      else {
+        res.send(response.hits.hits);
+      }
+    });
+}
+exports.getAllConfigurationAuthorAll = getAllConfigurationAuthorAll;
+
 function getAllConfigurationByDomain(req, res) {
   var domainName = req.swagger.params.domainName.value;
-
+  console.log("GET CONF", domainName);
   elasticClient.search({
     index : Configuration.configuration.index,
     type : Configuration.configuration.type,
@@ -172,11 +196,34 @@ function getAllConfigurationByDomain(req, res) {
 }
 exports.getAllConfigurationByDomain = getAllConfigurationByDomain;
 
+function getAllConfigurationByDomainAll(req, res) {
+    console.log("GET CONF", domainName, authorName);
+    return elasticClient.search({
+        index: "configuration",
+        type: "configuration",
+        body: {
+          query: {
+            multi_match: {
+              //TODO
+            }
+          }
+        }
+    }), function(error, response, status) {
+      if (error) {
+        console.log("[ERROR]" + error);
+      }
+      else {
+        res.send(response.hits.hits);
+      }
+    });
+}
+exports.getAllConfigurationByDomainAll = getAllConfigurationByDomainAll;
+
 
 exports.getAllConfigurationByDomainAuthor = function (req, res) {
   var domainName = req.swagger.params.domainName.value;
   var authorName = req.swagger.params.authorName.value;
-  console.log("GET", domainName, authorName);
+  console.log("GET CONF", domainName, authorName);
   elasticClient.search({
     index : Configuration.configuration.index,
     type : Configuration.configuration.type,
@@ -185,10 +232,9 @@ exports.getAllConfigurationByDomainAuthor = function (req, res) {
         "bool": {
           "must": [
             { "match": { "domain":  domainName }},
-            { "match": { "author": authorName   }}
+            { "match": { "author": authorName  }}
           ]
         }
-
       }
     }
   }, function(error, response, status) {
@@ -201,6 +247,29 @@ exports.getAllConfigurationByDomainAuthor = function (req, res) {
   });
 }
 
+function getAllConfigurationByAuthor(req, res) {
+  var domainName = req.swagger.params.domainName.value;
+  console.log("GET CONF", authorName);
+  elasticClient.search({
+    index : Configuration.configuration.index,
+    type : Configuration.configuration.type,
+    body : {
+      query : {
+        match : {
+          "author" : authorName
+        }
+      }
+    }
+  }, function(error, response, status) {
+    if (error) {
+      console.log("[ERROR]" + error);
+    }
+    else {
+      res.send(response.hits.hits);
+    }
+  });
+}
+exports.getAllConfigurationByDomain = getAllConfigurationByDomain;
 
 function addSponsoredContent(req, res) {
   var sponsoredContent = req.body
@@ -218,3 +287,56 @@ function addSponsoredContent(req, res) {
   });
 }
 exports.addSponsoredContent = addSponsoredContent;
+
+
+unction getAllSponsoredContentByDomain(req, res) {
+    var domainName = req.swagger.params.domainName.value;
+    console.log("GET STAT", domainName);
+    return elasticClient.search({
+        index: "sponsoredcontent",
+        type: "sponsoredcontent",
+        body: {
+          query : {
+            match : {
+              "domain" : domainName
+            }
+          }
+        }
+    }), function(error, response, status) {
+      if (error) {
+        console.log("[ERROR]" + error);
+      }
+      else {
+        res.send(response.hits.hits);
+      }
+    });
+}
+exports.getAllSponsoredContentByDomain = getAllSponsoredContentByDomain;
+
+function getAllSponsoredContentByDomainAuthor(req, res) {
+  var domainName = req.swagger.params.domainName.value;
+  var authorName = req.swagger.params.authorName.value;
+  console.log("GET STAT", domainName, authorName);
+    return elasticClient.search({
+        index: "sponsoredcontent",
+        type: "sponsoredcontent",
+        body : {
+          query : {
+            "bool": {
+              "must": [
+                { "match": { "domain":  domainName }},
+                { "match": { "author": authorName  }}
+              ]
+            }
+          }
+        }
+    }), function(error, response, status) {
+      if (error) {
+        console.log("[ERROR]" + error);
+      }
+      else {
+        res.send(response.hits.hits);
+      }
+    });
+}
+exports.getAllSponsoredContentByDomainAuthor = getAllSponsoredContentByDomainAuthor;

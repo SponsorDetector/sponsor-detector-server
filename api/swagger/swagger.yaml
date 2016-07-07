@@ -161,6 +161,29 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
+  /api/conf/{authorName}:
+    x-swagger-router-controller: elasticsearch
+    get:
+      description: Return the conf for a author
+      operationId: getAllConfigurationByAuthor
+      parameters:
+        - name: authorName
+          in: path
+          description: A author name for the conf.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: A conf for a author
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Confs"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
   /api/stats/{domainName}:
     x-swagger-router-controller: elasticsearch
     get:
