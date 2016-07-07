@@ -122,13 +122,73 @@ exports.initMapping = initMapping;
 function addConfiguration(req, res) {
   console.log(req);
   var configuration = req.body;
+  if (configuration.authorName && configuration.author) {
+  	var authoredConf = {
+  		domain : configuration.domain,
+  		authorName : configuration.authorName,
+  		author : configuration.author
+  	};
+    elasticClient.index({
+      index : Configuration.configuration.index,
+      type : Configuration.configuration.type,
+      body: authoredConf
+    });
+	// sauvegarde de la premiere
+  }
+
+  var sponsorConf = {
+  	domain : configuration.domain,
+  	sponsor : configuration.sponsor
+  }
   elasticClient.index({
     index : Configuration.configuration.index,
     type : Configuration.configuration.type,
-    body: configuration
+    body: sponsorConf
   });
   res.status(201);
-  res.send(configuration);
+
+  if (authoredConf) {
+    return elasticClient.search({
+        index: "sponsoredcontent",
+        type: "sponsoredcontent",
+        body: {
+          query : {
+            "bool": {
+              "must": [
+                { "match": { "domain": sponsorConf.domain }},
+                { "match": { "author": authoredConf.authorName  }}
+              ]
+            }
+          }
+        }
+    }), function(error, response, status) {
+      if (error) {
+        console.log("[ERROR]" + error);
+      }
+      else {
+        res.send(response.hits.hits);
+      }
+    };
+  }
+  return elasticClient.search({
+      index: "sponsoredcontent",
+      type: "sponsoredcontent",
+      body: {
+        query: {
+          match: {
+            "domain": sponsorConf.domain
+          }
+        }
+      }
+  }), function(error, response, status) {
+    if (error) {
+      console.log("[ERROR]" + error);
+    }
+    else {
+      res.send(response.hits.hits);
+    }
+  };
+  //res.send(configuration);
 }
 exports.addConfiguration = addConfiguration;
 
@@ -168,7 +228,7 @@ function getAllConfigurationAuthorAll(req, res) {
       else {
         res.send(response.hits.hits);
       }
-    });
+    };
 }
 exports.getAllConfigurationAuthorAll = getAllConfigurationAuthorAll;
 
@@ -215,7 +275,7 @@ function getAllConfigurationByDomainAll(req, res) {
       else {
         res.send(response.hits.hits);
       }
-    });
+    };
 }
 exports.getAllConfigurationByDomainAll = getAllConfigurationByDomainAll;
 
@@ -289,7 +349,7 @@ function addSponsoredContent(req, res) {
 exports.addSponsoredContent = addSponsoredContent;
 
 
-unction getAllSponsoredContentByDomain(req, res) {
+function getAllSponsoredContentByDomain(req, res) {
     var domainName = req.swagger.params.domainName.value;
     console.log("GET STAT", domainName);
     return elasticClient.search({
@@ -309,7 +369,7 @@ unction getAllSponsoredContentByDomain(req, res) {
       else {
         res.send(response.hits.hits);
       }
-    });
+    };
 }
 exports.getAllSponsoredContentByDomain = getAllSponsoredContentByDomain;
 
@@ -337,6 +397,6 @@ function getAllSponsoredContentByDomainAuthor(req, res) {
       else {
         res.send(response.hits.hits);
       }
-    });
+    };
 }
 exports.getAllSponsoredContentByDomainAuthor = getAllSponsoredContentByDomainAuthor;

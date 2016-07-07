@@ -301,7 +301,7 @@ definitions:
     properties:
       extractor:
           $ref: "#/definitions/Extractor"
-        
+
 
   Sponsor:
     properties:
@@ -311,6 +311,9 @@ definitions:
           $ref: "#/definitions/Detector"
   Confs:
     properties:
+      authorName:
+          type: string
+          description: Name of the author
       domain:
         type: string
         description: Name of the domain
