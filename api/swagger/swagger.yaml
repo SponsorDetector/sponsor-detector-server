@@ -300,18 +300,14 @@ definitions:
   Author:
     properties:
       extractor:
-        description: An author extractor
-        items:
           $ref: "#/definitions/Extractor"
         
 
   Sponsor:
     properties:
       extractor:
-        items:
           $ref: "#/definitions/Extractor"
       detector:
-        items:
           $ref: "#/definitions/Detector"
   Confs:
     properties:
